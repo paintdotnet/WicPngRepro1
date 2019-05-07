@@ -114,7 +114,7 @@ public:
     {
         //cout << "    Seeking to " << dlibMove.QuadPart << endl;
 
-        if (dlibMove.QuadPart < 0)
+        if (dwOrigin == STREAM_SEEK_SET && dlibMove.QuadPart < 0)
         {
             // TODO: Set breakpoint here so you can observe the negative seek offset resulting from an integer overflow
             int z = 5; ++z;
