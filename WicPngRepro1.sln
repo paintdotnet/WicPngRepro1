@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WicPngRepro1", "WicPngRepro1.vcxproj", "{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Debug|x64.ActiveCfg = Debug|x64
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Debug|x64.Build.0 = Debug|x64
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Debug|x86.ActiveCfg = Debug|Win32
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Debug|x86.Build.0 = Debug|Win32
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Release|x64.ActiveCfg = Release|x64
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Release|x64.Build.0 = Release|x64
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Release|x86.ActiveCfg = Release|Win32
+		{913E2CEB-CCCC-4EE0-8272-C1224CFC5704}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E1C463D-8C74-4328-8494-F27CAA7E788E}
+	EndGlobalSection
+EndGlobal
