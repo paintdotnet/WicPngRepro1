@@ -29,7 +29,7 @@ CComModule _Module;
 using namespace std;
 
 #define IFS(hr, expr) \
-	if (SUCCEEDED((hr))) \
+    if (SUCCEEDED((hr))) \
     { \
         (hr) = (expr); \
     }
@@ -39,230 +39,230 @@ using namespace std;
 template<typename T>
 static HRESULT CreateComObject(T** ppResult)
 {
-	if (ppResult == NULL)
-	{
-		return E_POINTER;
-	}
+    if (ppResult == NULL)
+    {
+        return E_POINTER;
+    }
 
-	*ppResult = NULL;
+    *ppResult = NULL;
 
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	CComObject<T>* pObject = NULL;
-	if (SUCCEEDED(hr))
-	{
-		hr = CComObject<T>::CreateInstance(&pObject);
-	}
+    CComObject<T>* pObject = NULL;
+    if (SUCCEEDED(hr))
+    {
+        hr = CComObject<T>::CreateInstance(&pObject);
+    }
 
-	if (SUCCEEDED(hr))
-	{
-		pObject->AddRef();
-		*ppResult = pObject;
-	}
+    if (SUCCEEDED(hr))
+    {
+        pObject->AddRef();
+        *ppResult = pObject;
+    }
 
-	return hr;
+    return hr;
 }
 
 // IStream wrapper
 class ATL_NO_VTABLE CStreamWrapper
-	: public CComObjectRootEx<CComMultiThreadModel>,
-	  public IStream
+    : public CComObjectRootEx<CComMultiThreadModel>,
+      public IStream
 {
 private:
-	CComPtr<IStream> m_spStream;
+    CComPtr<IStream> m_spStream;
 
 public:
-	DECLARE_NO_REGISTRY()
+    DECLARE_NO_REGISTRY()
 
-	BEGIN_COM_MAP(CStreamWrapper)
-		COM_INTERFACE_ENTRY(IStream)
-	END_COM_MAP()
+    BEGIN_COM_MAP(CStreamWrapper)
+        COM_INTERFACE_ENTRY(IStream)
+    END_COM_MAP()
 
-	CStreamWrapper()
-	{
-	}
+    CStreamWrapper()
+    {
+    }
 
-	virtual ~CStreamWrapper()
-	{
-	}
+    virtual ~CStreamWrapper()
+    {
+    }
 
-	HRESULT Initialize(IStream* pStream)
-	{
-		if (m_spStream)
-		{
-			return E_FAIL;
-		}
+    HRESULT Initialize(IStream* pStream)
+    {
+        if (m_spStream)
+        {
+            return E_FAIL;
+        }
 
-		m_spStream = pStream;
-		return S_OK;
-	}
+        m_spStream = pStream;
+        return S_OK;
+    }
 
-	// ISequentialStream
-	HRESULT STDMETHODCALLTYPE Read(void* pv, ULONG cb, ULONG* pcbRead)
-	{
-		//cout << "    Read()ing " << cb << " bytes" << endl;
-		return m_spStream->Read(pv, cb, pcbRead);
-	}
+    // ISequentialStream
+    HRESULT STDMETHODCALLTYPE Read(void* pv, ULONG cb, ULONG* pcbRead)
+    {
+        //cout << "    Read()ing " << cb << " bytes" << endl;
+        return m_spStream->Read(pv, cb, pcbRead);
+    }
 
-	HRESULT STDMETHODCALLTYPE Write(const void* pv, ULONG cb, ULONG* pcbWritten)
-	{
-		return m_spStream->Write(pv, cb, pcbWritten);
-	}
+    HRESULT STDMETHODCALLTYPE Write(const void* pv, ULONG cb, ULONG* pcbWritten)
+    {
+        return m_spStream->Write(pv, cb, pcbWritten);
+    }
 
-	// IStream
-	HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition)
-	{
-		//cout << "    Seeking to " << dlibMove.QuadPart << endl;
+    // IStream
+    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition)
+    {
+        //cout << "    Seeking to " << dlibMove.QuadPart << endl;
 
-		if (dlibMove.QuadPart < 0)
-		{
-			// TODO: Set breakpoint here so you can observe the negative seek offset resulting from an integer overflow
-			int z = 5; ++z;
+        if (dlibMove.QuadPart < 0)
+        {
+            // TODO: Set breakpoint here so you can observe the negative seek offset resulting from an integer overflow
+            int z = 5; ++z;
 
-			// Uncomment this line and things will actually decode properly...
-			//dlibMove.HighPart = 0;
-		}
+            // Uncomment this line and things will actually decode properly...
+            //dlibMove.HighPart = 0;
+        }
 
-		return m_spStream->Seek(dlibMove, dwOrigin, plibNewPosition);
-	}
+        return m_spStream->Seek(dlibMove, dwOrigin, plibNewPosition);
+    }
 
-	HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER libNewSize)
-	{
-		return m_spStream->SetSize(libNewSize);
-	}
+    HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER libNewSize)
+    {
+        return m_spStream->SetSize(libNewSize);
+    }
 
-	HRESULT STDMETHODCALLTYPE CopyTo(IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten)
-	{
-		return m_spStream->CopyTo(pstm, cb, pcbRead, pcbWritten);
-	}
+    HRESULT STDMETHODCALLTYPE CopyTo(IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten)
+    {
+        return m_spStream->CopyTo(pstm, cb, pcbRead, pcbWritten);
+    }
 
-	HRESULT STDMETHODCALLTYPE Commit(DWORD grfCommitFlags)
-	{
-		return m_spStream->Commit(grfCommitFlags);
-	}
+    HRESULT STDMETHODCALLTYPE Commit(DWORD grfCommitFlags)
+    {
+        return m_spStream->Commit(grfCommitFlags);
+    }
 
-	HRESULT STDMETHODCALLTYPE Revert(void)
-	{
-		return m_spStream->Revert();
-	}
+    HRESULT STDMETHODCALLTYPE Revert(void)
+    {
+        return m_spStream->Revert();
+    }
 
-	HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
-	{
-		return m_spStream->LockRegion(libOffset, cb, dwLockType);
-	}
+    HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
+    {
+        return m_spStream->LockRegion(libOffset, cb, dwLockType);
+    }
 
-	HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
-	{
-		return m_spStream->UnlockRegion(libOffset, cb, dwLockType);
-	}
+    HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
+    {
+        return m_spStream->UnlockRegion(libOffset, cb, dwLockType);
+    }
 
-	HRESULT STDMETHODCALLTYPE Stat(STATSTG* pstatstg, DWORD grfStatFlag)
-	{
-		return m_spStream->Stat(pstatstg, grfStatFlag);
-	}
+    HRESULT STDMETHODCALLTYPE Stat(STATSTG* pstatstg, DWORD grfStatFlag)
+    {
+        return m_spStream->Stat(pstatstg, grfStatFlag);
+    }
 
-	HRESULT STDMETHODCALLTYPE Clone(IStream** ppstm)
-	{
-		return m_spStream->Clone(ppstm);
-	}
+    HRESULT STDMETHODCALLTYPE Clone(IStream** ppstm)
+    {
+        return m_spStream->Clone(ppstm);
+    }
 };
 
 int wmain(int argc, wchar_t** argv)
 {
-	if (argc != 2)
-	{
-		cout << "arg1 needs to be path to filename, and it needs to be a PNG";
-		return 1;
-	}
+    if (argc != 2)
+    {
+        cout << "arg1 needs to be path to filename, and it needs to be a PNG";
+        return 1;
+    }
 
-	cout << "File: " << argv[1] << endl;
+    cout << "File: " << argv[1] << endl;
 
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	IFS(hr, CoInitializeEx(NULL, COINIT_MULTITHREADED));
+    IFS(hr, CoInitializeEx(NULL, COINIT_MULTITHREADED));
 
-	CComPtr<IWICImagingFactory2> spFactory;
-	IFS(hr, CoCreateInstance(
-		CLSID_WICImagingFactory2,
-		NULL,
-		CLSCTX_INPROC_SERVER,
-		__uuidof(IWICImagingFactory),
-		reinterpret_cast<void**>(&spFactory)));
+    CComPtr<IWICImagingFactory2> spFactory;
+    IFS(hr, CoCreateInstance(
+        CLSID_WICImagingFactory2,
+        NULL,
+        CLSCTX_INPROC_SERVER,
+        __uuidof(IWICImagingFactory),
+        reinterpret_cast<void**>(&spFactory)));
 
-	CComPtr<IWICStream> spWicStream;
-	IFS(hr, spFactory->CreateStream(&spWicStream));
+    CComPtr<IWICStream> spWicStream;
+    IFS(hr, spFactory->CreateStream(&spWicStream));
 
-	IFS(hr, spWicStream->InitializeFromFilename(
-		argv[1], 
-		GENERIC_READ));
+    IFS(hr, spWicStream->InitializeFromFilename(
+        argv[1], 
+        GENERIC_READ));
 
-	CComPtr<CStreamWrapper> spStreamWrapper;
-	IFS(hr, CreateComObject<CStreamWrapper>(&spStreamWrapper));
+    CComPtr<CStreamWrapper> spStreamWrapper;
+    IFS(hr, CreateComObject<CStreamWrapper>(&spStreamWrapper));
 
-	IFS(hr, spStreamWrapper->Initialize(spWicStream));
+    IFS(hr, spStreamWrapper->Initialize(spWicStream));
 
-	CComPtr<IWICBitmapDecoder> spDecoder;
-	IFS(hr, spFactory->CreateDecoder(
-		GUID_ContainerFormatPng, 
-		&GUID_VendorMicrosoftBuiltIn, 
-		&spDecoder));
+    CComPtr<IWICBitmapDecoder> spDecoder;
+    IFS(hr, spFactory->CreateDecoder(
+        GUID_ContainerFormatPng, 
+        &GUID_VendorMicrosoftBuiltIn, 
+        &spDecoder));
 
-	IFS(hr, spDecoder->Initialize(
-		spStreamWrapper,
-		WICDecodeMetadataCacheOnDemand));
+    IFS(hr, spDecoder->Initialize(
+        spStreamWrapper,
+        WICDecodeMetadataCacheOnDemand));
 
-	CComPtr<IWICBitmapFrameDecode> spFrame0;
-	IFS(hr, spDecoder->GetFrame(0, &spFrame0));
+    CComPtr<IWICBitmapFrameDecode> spFrame0;
+    IFS(hr, spDecoder->GetFrame(0, &spFrame0));
 
-	UINT uiWidth = 0;
-	UINT uiHeight = 0;
-	IFS(hr, spFrame0->GetSize(&uiWidth, &uiHeight));
-	if (SUCCEEDED(hr)) 
-	{
-		cout << "Image is " << uiWidth << " x " << uiHeight << endl;
-	}
+    UINT uiWidth = 0;
+    UINT uiHeight = 0;
+    IFS(hr, spFrame0->GetSize(&uiWidth, &uiHeight));
+    if (SUCCEEDED(hr)) 
+    {
+        cout << "Image is " << uiWidth << " x " << uiHeight << endl;
+    }
 
-	WICPixelFormatGUID pixelFormat;
-	IFS(hr, spFrame0->GetPixelFormat(&pixelFormat));
+    WICPixelFormatGUID pixelFormat;
+    IFS(hr, spFrame0->GetPixelFormat(&pixelFormat));
 
-	UINT cbRow = uiWidth * 4;
-	UINT uiBufferRows = 128;
-	UINT cbBufferSize = cbRow * uiBufferRows;
+    UINT cbRow = uiWidth * 4;
+    UINT uiBufferRows = 128;
+    UINT cbBufferSize = cbRow * uiBufferRows;
 
-	BYTE* pBuffer = NULL;
-	if (SUCCEEDED(hr))
-	{
-		pBuffer = (BYTE*)malloc(cbBufferSize);
-		if (pBuffer == NULL)
-		{
-			hr = E_OUTOFMEMORY;
-		}
-	}
+    BYTE* pBuffer = NULL;
+    if (SUCCEEDED(hr))
+    {
+        pBuffer = (BYTE*)malloc(cbBufferSize);
+        if (pBuffer == NULL)
+        {
+            hr = E_OUTOFMEMORY;
+        }
+    }
 
-	for (UINT y = 0; SUCCEEDED(hr) && y < uiHeight; y += uiBufferRows)
-	{
-		WICRect rc;
-		rc.X = 0;
-		rc.Y = y;
-		rc.Width = uiWidth;
+    for (UINT y = 0; SUCCEEDED(hr) && y < uiHeight; y += uiBufferRows)
+    {
+        WICRect rc;
+        rc.X = 0;
+        rc.Y = y;
+        rc.Width = uiWidth;
 
-		UINT bottom0 = y + uiBufferRows;
-		UINT bottom = min(bottom0, uiHeight);
-		rc.Height = bottom - y;
+        UINT bottom0 = y + uiBufferRows;
+        UINT bottom = min(bottom0, uiHeight);
+        rc.Height = bottom - y;
 
-		cout << "Copying " << rc.Height << " rows starting from y = " << y << endl;
-		IFS(hr, spFrame0->CopyPixels(&rc, cbRow, cbBufferSize, pBuffer));
+        cout << "Copying " << rc.Height << " rows starting from y = " << y << endl;
+        IFS(hr, spFrame0->CopyPixels(&rc, cbRow, cbBufferSize, pBuffer));
 
-		// NOTE: At this point, if you saw the negative Seek and failure HRESULT from IStream::Seek(),
-		//       you will also see that the HRESULT from CopyPixels is S_OK .....
+        // NOTE: At this point, if you saw the negative Seek and failure HRESULT from IStream::Seek(),
+        //       you will also see that the HRESULT from CopyPixels is S_OK .....
 
-		if (FAILED(hr))
-		{
-			cout << "    hr = " << hr;
-		}
-	}
+        if (FAILED(hr))
+        {
+            cout << "    hr = " << hr;
+        }
+    }
 
-	cout << "Done. hr = " << hr;
+    cout << "Done. hr = " << hr;
 
-	return 0;
+    return 0;
 }
